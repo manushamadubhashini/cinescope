@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
@@ -11,8 +13,96 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { EMAIL_REGEX } from "@/lib/constants";
+
+const DEFAULT_ERROR = {
+  error: false,
+  message: "",
+};
 
 export default function LoginForm() {
+  const [error, setError] = useState(DEFAULT_ERROR);
+  const [isLoading,setIsLoading] = useState(false)
+
+  const validateForm = ({ email, password }) => {
+    console.log("Email", email);
+    console.log("Password", password);
+    if (email === "") {
+      setError({
+        error: true,
+        message: "Email is required.",
+      });
+      return false;
+    } else if (password === "") {
+      setError({
+        error: true,
+        message: "Password is required.",
+      });
+      return false;
+    } else if(!EMAIL_REGEX.test(email)){
+      setError({
+        error: true,
+        message: "Email is not valid."
+      })
+      return false;
+    }
+    setError(DEFAULT_ERROR);
+    return true;
+  };
+
+  const handleSubmitForm = async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+
+    const email = formData.get("email");
+    const password = formData.get("password");
+    // basic validation
+    if (validateForm({ email, password })) {
+      console.log("validation passed!");
+      setIsLoading(true)
+      // pass the login data to the login API
+      //methna external api ekak call karana nisa 
+      try{
+        const loginResponse = await fetch("http://localhost:3000/api/v1/login",{
+          method : "POST",
+          headers : {
+            "Content-Type" : "application/json"
+
+          },
+          body : JSON.stringify({email,password})
+        }
+      )
+        if(!loginResponse.ok){
+          const errorData = await loginResponse.json();
+          setError({
+            error : true,
+            message : errorData.message || "Login Failed. Please try again"
+          });
+
+        }else{
+          const loginData = await loginResponse.json();
+          console.log("Login Successful.", loginData);
+        }
+  
+
+
+      }catch (error){
+        setError({
+          error : true,
+          message : "An unexpected error during login. Please try again."
+        })
+
+      }finally{
+        setTimeout(() =>{
+            setIsLoading(false)
+        },3000)
+      }
+    } else {
+      console.log("validation failed!");
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6 bg-background">
       <Card>
@@ -23,17 +113,20 @@ export default function LoginForm() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmitForm} noValidate>
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="Enter your email"
+                  autoComplete="email"
                   required
                 />
               </div>
+
               <div className="grid gap-3">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
@@ -44,10 +137,25 @@ export default function LoginForm() {
                     Forgot your password?
                   </Link>
                 </div>
-                <Input id="password" type="password" required />
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  autoComplete="current-password"
+                  required
+                />
+              </div>
+              <div className="flex justify-center">
+                {error.error && (
+                  <span className="text-sm text-red-500 font-medium animate-pulse duration-500">
+                    {error.message}
+                  </span>
+                )}
               </div>
               <div className="flex flex-col gap-3">
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" disabled = {isLoading}>
+                  {isLoading && <Loader2 className="animate-spin"/>}
                   Login
                 </Button>
                 <Button variant="outline" className="w-full">
