@@ -42,14 +42,18 @@
 // }
 
 import HeaderNav from "@/components/header-nav";
+import HeroBanner from "@/components/home/hero-banner";
 import React from "react";
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen ">
      <HeaderNav/>
-      <header className="flex-1 ">Main Section</header>
+     <main className="flex-1">
+      <HeroBanner/>
+     </main>
       <header className="flex-1 bg-sky-300">Footer Section</header>
     </div>
   );
 }
+ 
