@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { EMAIL_REGEX } from "@/lib/constants";
+import { signIn } from "@/lib/auth-client";
 
 const DEFAULT_ERROR = {
   error: false,
@@ -61,32 +62,24 @@ export default function LoginForm() {
     if (validateForm({ email, password })) {
       console.log("validation passed!");
       setIsLoading(true)
-      // pass the login data to the login API
-      //methna external api ekak call karana nisa 
       try{
-        const loginResponse = await fetch("http://localhost:3000/api/v1/login",{
-          method : "POST",
-          headers : {
-            "Content-Type" : "application/json"
-
-          },
-          body : JSON.stringify({email,password})
-        }
-      )
-        if(!loginResponse.ok){
-          const errorData = await loginResponse.json();
-          setError({
-            error : true,
-            message : errorData.message || "Login Failed. Please try again"
-          });
-
-        }else{
-          const loginData = await loginResponse.json();
-          console.log("Login Successful.", loginData);
-        }
-  
-
-
+        await signIn.email(
+          {email,password},
+          {
+            onSuccess :(ctx) => {
+              console.log("Login Successfully",ctx)
+            },
+            onError: (ctx) =>{
+              setError({
+                error:true,
+                message:ctx.error.message || "Login Failed. Please try again"// context.error.message
+              })
+             
+            }
+          }
+        ); 
+      
+       
       }catch (error){
         setError({
           error : true,
@@ -94,10 +87,10 @@ export default function LoginForm() {
         })
 
       }finally{
-        setTimeout(() =>{
-            setIsLoading(false)
-        },3000)
+      
+       setIsLoading(false)
       }
+    
     } else {
       console.log("validation failed!");
     }
