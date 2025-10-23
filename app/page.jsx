@@ -42,6 +42,7 @@
 // }
 
 import HeaderNav from "@/components/header-nav";
+import FeaturedMovies from "@/components/home/features-movies";
 import HeroBanner from "@/components/home/hero-banner";
 import React from "react";
 
@@ -51,6 +52,7 @@ export default function Home() {
      <HeaderNav/>
      <main className="flex-1">
       <HeroBanner/>
+        <FeaturedMovies/>
      </main>
       <header className="flex-1 bg-sky-300">Footer Section</header>
     </div>
