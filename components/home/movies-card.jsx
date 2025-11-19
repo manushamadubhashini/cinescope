@@ -4,9 +4,11 @@ import { Card ,CardContent, CardFooter } from '../ui/card'
 import React, { useState } from 'react'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
+import { Skeleton } from '../ui/skeleton'
 
 export default function MoviesCard({movie}) {
   const [posterUrl,setPosterUrl] = useState(movie.poster)
+
   return (
       <Card className="border-primary/20 hover:border-primary/50 py-0 transition-colors overflow-hidden gap-0">
         <div className='aspect-2/3 w-full overflow-hidden'>
@@ -28,5 +30,27 @@ export default function MoviesCard({movie}) {
             <Button variant="ghost" className='hover:text-primary'>Details</Button>
           </CardFooter>
         </Card>
+  )
+}
+// This is a dummy component for skeleton loading state
+export function  MoviesCardSkeleton () {
+  return (
+    <div className = "overflow-hidden rounded-lg">
+      <Skeleton className="aspect-2/3 w-full"/>
+      <div className='p-4'>
+      <div className="space-y-2" >
+        <Skeleton className="h-4 w-3/4"/>
+         <Skeleton className="h-4 w-1/2"/>
+      </div>
+       <div className="flex mt-3 gap-1">
+        <Skeleton className="h-5 w-1/5"/>
+         <Skeleton className="h-5 w-1/5"/>
+      </div>
+      <div className='flex justify-between gap-2 py-7'>
+        <Skeleton className="h-6 w-16 rounded-full"/>
+        <Skeleton className="h-6 w-16 rounded-full"/>    
+      </div>
+      </div>
+    </div>
   )
 }
