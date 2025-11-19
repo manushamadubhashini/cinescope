@@ -45,11 +45,18 @@ import HeaderNav from "@/components/header-nav";
 import FeaturedMovies from "@/components/home/features-movies";
 import HeroBanner from "@/components/home/hero-banner";
 import React from "react";
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth.api.getSession({
+        headers: await headers(),
+    })
+    console.log("User session on home page",session)
+    const isAuthenticated = session ? true : false;
   return (
     <div className="flex flex-col min-h-screen ">
-     <HeaderNav/>
+     <HeaderNav isAuthenticated={isAuthenticated}/>
      <main className="flex-1">
       <HeroBanner/>
         <FeaturedMovies/>

@@ -1,9 +1,12 @@
 
 import { Section } from 'lucide-react'
-import React from 'react'
+import React, { Suspense } from 'react'
 import { Button } from '../ui/button'
-import MoviesList from './moveis-list'
+import MoviesList from '@/components/home/moveis-list'
+import { MoviesListSkeleton } from '@/components/home/moveis-list'
 
+
+// RSC
 export default function FeaturedMovies() {
   return (
    <section id="featured-movies" className='container px-4 py-12 md:px-6'>
@@ -15,7 +18,10 @@ export default function FeaturedMovies() {
         <Button variant="outline">View  All</Button>
       </div>
       <div className='bg-purple-400 w-full h-20 rounded-lg mb-5'></div>
-      <MoviesList/> 
+
+      <Suspense fallback={<MoviesListSkeleton/>}>
+        <MoviesList/>
+      </Suspense>
    </section>
   )
 }

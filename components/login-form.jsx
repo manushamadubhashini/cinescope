@@ -10,11 +10,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {redirect} from "next/navigation"
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { EMAIL_REGEX } from "@/lib/constants";
 import { signIn } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const DEFAULT_ERROR = {
   error: false,
@@ -23,7 +25,8 @@ const DEFAULT_ERROR = {
 
 export default function LoginForm() {
   const [error, setError] = useState(DEFAULT_ERROR);
-  const [isLoading,setIsLoading] = useState(false)
+  const [isLoading,setIsLoading] = useState(false);
+  const router = useRouter()
 
   const validateForm = ({ email, password }) => {
     console.log("Email", email);
@@ -68,6 +71,7 @@ export default function LoginForm() {
           {
             onSuccess :(ctx) => {
               console.log("Login Successfully",ctx)
+              router.push("/dashboard")
             },
             onError: (ctx) =>{
               setError({
