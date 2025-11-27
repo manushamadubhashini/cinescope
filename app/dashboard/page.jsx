@@ -2,6 +2,6 @@ import React from 'react'
 
 export default function AdminDashboard() {
   return (
-    <div>Admin Dashboard</div>
+    <div className='min-h-screen flex bg-white'>Admin Dashboard</div>
   )
 }

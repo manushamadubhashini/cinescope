@@ -14,7 +14,7 @@ const handleSignOut= async () =>{
 }
   return (
    <div className="flex justify-center p-10">
-    <Button onClick = {()=> handleSignOut()} >Sign Out</Button>
+    <Button onClick = {()=> handleSignOut()} >Log Out</Button>
    </div>
   )
 }
