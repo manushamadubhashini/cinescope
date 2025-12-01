@@ -33,7 +33,7 @@ export default function DashboardLayout({ children }) {
            <UserNav/>
           </div>
         </header>
-        <main className="flex p-4 md:p-8">{children}</main>
+        <main className="flex-1 p-4 md:p-8">{children}</main>
          {/* big sizes p-8 */}
       </SidebarInset>
     </SidebarProvider>
